@@ -33,6 +33,10 @@ fi
 for d in "${dirs[@]}"; do
   echo "Restoring: $d"
   mv -f "$d/amd_fidelityfx_loader_dx12_orig.dll" "$d/amd_fidelityfx_loader_dx12.dll"
+  if [ -f "$d/witcher3.exe.backup" ]; then
+    mv -f "$d/witcher3.exe.backup" "$d/witcher3.exe"
+    echo "  restored original witcher3.exe"
+  fi
   bin="${d:h}"
   if [ -L "$bin/x64" ]; then rm "$bin/x64"
   elif [ -f "$bin/x64/.ffxproxy-copy" ]; then rm -rf "$bin/x64"

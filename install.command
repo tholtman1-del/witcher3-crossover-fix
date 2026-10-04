@@ -84,6 +84,17 @@ for d in "${found[@]}"; do
     mv -f "$d/amd_fidelityfx_loader_dx12.dll" "$d/amd_fidelityfx_loader_dx12_orig.dll"
   fi
   cp "$dll" "$d/amd_fidelityfx_loader_dx12.dll"
+  # DLSS workaround: the game detects Wine by looking for the string "wine_get_version".
+  # Rename it (same length, so the binary stays valid) to make that check fail.
+  # Done before the bin/x64 copy below so a copied folder gets the patched exe too.
+  exe="$d/witcher3.exe"
+  if LC_ALL=C grep -aq "wine_get_version" "$exe"; then
+    cp -f "$exe" "$exe.backup"
+    LC_ALL=C perl -pi -e 's/wine_get_version/frog_get_version/g' "$exe"
+    echo "  patched witcher3.exe for DLSS (backup: witcher3.exe.backup)"
+  else
+    echo "  witcher3.exe already patched for DLSS"
+  fi
   # CrossOver silently redirects bin\x64_dx12\witcher3.exe to bin\x64\witcher3.exe (the DX11
   # build, which 5.00b no longer ships). Point that path at the DX12 build.
   bin="${d:h}"

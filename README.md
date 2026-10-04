@@ -14,6 +14,7 @@ The Witcher 3 Remastered patch 5.00b (released 28 Sep 2026) hangs on a black scr
 - Adds a symlink `bin/x64 → x64_dx12` so CrossOver's redirect lands on the real DX12 build.
 - Replaces `amd_fidelityfx_loader_dx12.dll` with a small proxy. The original is kept as `amd_fidelityfx_loader_dx12_orig.dll` and every FidelityFX call is forwarded to it unchanged. The proxy also hooks the game's D3D12 device and refuses stream-output pipelines before they reach D3DMetal. The game continues without that pipeline.
 - Marks the game as DPI-aware at startup. Otherwise, with CrossOver's **High Resolution Mode** on, the game only sees a half-size virtual screen and tops out at 1512×982 on a 14" MacBook Pro. With this, resolutions like 1920×1200 or the full native size show up. Mac screens are 16:10, so choose 1920×1200 rather than 1920×1080.
+- Patches `witcher3.exe` for DLSS: the game detects Wine by looking for the string `wine_get_version`, so the installer renames it to `frog_get_version` (same length, binary-safe, via `perl`). The original is saved as `witcher3.exe.backup`, and `uninstall.command` restores it. DLSS under CrossOver is community-reported and unverified here.
 
 Nothing else in the game is modified, and the proxy makes no network access.
 
