@@ -88,7 +88,11 @@ for d in "${found[@]}"; do
   # build, which 5.00b no longer ships). Point that path at the DX12 build.
   bin="${d:h}"
   if [ -L "$bin/x64" ]; then
-    echo "  bin/x64 link already in place"
+    if [ "$(readlink "$bin/x64")" = x64_dx12 ]; then
+      echo "  bin/x64 -> x64_dx12 already in place"
+    else
+      echo "  existing bin/x64 link points elsewhere, leaving it alone"
+    fi
   elif [ -f "$bin/x64/.ffxproxy-copy" ] || [ ! -e "$bin/x64" ]; then
     if [ ! -e "$bin/x64" ] && ln -s x64_dx12 "$bin/x64" 2>/dev/null; then
       echo "  created bin/x64 -> x64_dx12"
